@@ -16,7 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+import Blog_Economia.views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', Blog_Economia.views.index),
+    path('iniciar_sesion/', Blog_Economia.views.iniciar_sesion),
+    path('cerrar_sesion/', Blog_Economia.views.cerrar_sesion),
+    path('registrarse/', Blog_Economia.views.registrarse),
+    path('catergorias/<int:id_categoria>/', Blog_Economia.views.categoria,  name='categoria'),
+    path('crear_noticia/', Blog_Economia.views.crear_noticia),
+    path('noticias/', Blog_Economia.views.noticias),
+    path('noticia/<int:id_noticia>/', Blog_Economia.views.noticia, name='noticia'),
+    path('perfil/', Blog_Economia.views.perfil),
+    path('acerca_de/', Blog_Economia.views.acerca_de),
+    path('contacto/', Blog_Economia.views.contacto),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
