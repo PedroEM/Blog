@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Perfil {{ user.username }}</title>
+        <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+        <style>
+            /* Estilo para hacer la imagen circular */
+            .circular-image {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+</head>
+<body>
+    <!-- Page Header-->
+    <section style="background-color: #eee;">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+            <ol class="breadcrumb mb-0">
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{user.username}}</li>
+            </ol>
+          </nav>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            {% if usuario.imagen %}
+                <img class="circular-image" src="{{ usuario.imagen.url }}" alt="{{ usuario.user.username }}" style="width: 150px;">
+            {% else %}
+                <img class="circular-image" src="{% static 'img/default-profile.png' %}" alt="{{ usuario.user.username }}" style="width: 150px;">
+            {% endif %}
+            <h5 class="my-3">{{user.get_full_name}}</h5>
+            <p class="text-muted mb-1">
+                {% if request.user.usuario.rol == 'C' %}
+                    Colaborador
+                {% else %}
+                    Miembro
+                {% endif %}
+            </p>
+            <div class="d-flex justify-content-center mb-2">
+                <button type="button" class="btn btn-primary" onclick="editar()">Editar</button>
+                {% if request.user.usuario.rol == 'C' %}
+                    <button type="button" class="btn btn-outline-primary ms-1" onclick="crear_articulo()">Crear Articulo</button>
+                {% endif %}
+                <script>
+                    function editar() {
+                        window.location.href = "/editar_perfil";
+                    }
+                    function crear_articulo() {
+                        window.location.href = "/crear_articulo";
+                    }
+                </script>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4 mb-lg-0">
+          <div class="card-body p-0">
+              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <i class="fa-solid fa-envelope fa-lg" style="color: #333333;"></i>
+                <p class="mb-0">{{user.email}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Full Name</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{user.get_full_name}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Username</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{user.username}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+            {%if request.user.usuario.rol == 'C' %}
+          <div class="col-md-6">
+            <div class="card mb-4 mb-md-0">
+              <div class="card-body">
+                <p class="mb-4"><span class="text-primary font-italic me-1">Articulos</span>
+                </p>
+                {% for articulo in articulos %}
+                    <a href="{% url 'noticia' id_noticia=articulo.pk %}" class="mb-1" style="font-size: 1.5rem;">
+                        {{ articulo.titulo }}
+                    </a>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+            {% endif %}
+          <div class="col-md-6">
+            <div class="card mb-4 mb-md-0">
+              <div class="card-body">
+                <p class="mb-4"><span class="text-primary font-italic me-1">Comentarios</span>
+                </p>
+                {% for comentario in comentarios %}
+                    <a href="{% url 'noticia' id_noticia=comentario.articulo.pk %}" class="mb-1" style="font-size: 1.5rem;">
+                        {{ comentario.articulo.titulo }}
+                    </a>
+                    <p>{{comentario.contenido|truncatechars:20}}</p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

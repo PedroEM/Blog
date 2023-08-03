@@ -1,0 +1,73 @@
+.navegacion_categoria {
+  background-color: #f2f2f2;
+}
+
+.lis_categoria {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.lis_categoria li {
+  flex: 1;
+}
+
+.lis_categoria li a {
+  display: block;
+  color: #333;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.lis_categoria li a:hover {
+  background-color: #ddd;
+}
+
+
+.container_login {
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 40px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+  }
+  
+  .container_login .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .container_login h2 {
+    margin-top: 0;
+  }
+  
+  .container_login input[type="email"],
+  .container_login input[type="password"],
+  .container_login input[type="text"] {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+  }
+  
+  .container_login button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .container_login button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  
+  .container_login .message {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  

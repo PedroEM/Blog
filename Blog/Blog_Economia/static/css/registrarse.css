@@ -1,0 +1,45 @@
+.container_registrarse {
+  max-width: 400px;
+  margin: 30px auto;
+  padding: 40px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+.container_registrarse .form {
+  display: flex;
+  flex-direction: column;
+}
+
+.container_registrarse h2 {
+  margin-top: 0;
+}
+
+.container_registrarse input[type="text"],
+.container_registrarse input[type="email"],
+.container_registrarse input[type="password"],
+.container_registrarse input[type="date"],
+.container_registrarse select {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+.container_registrarse button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.container_registrarse button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.container_registrarse .message {
+  margin-top: 10px;
+  font-size: 14px;
+}
