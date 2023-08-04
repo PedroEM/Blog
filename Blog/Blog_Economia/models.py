@@ -41,3 +41,14 @@ class Comentario(models.Model):
 
     def __str__(self):
         return self.contenido
+<<<<<<< HEAD
+=======
+
+class Contacto(models.Model):
+    nombre = models.CharField(max_length=50)
+    correo = models.EmailField()
+    mensaje = models.TextField()
+
+    def __str__(self):
+        return self.nombre
+>>>>>>> d2382c94f233b790a20660b4f8491631be6a6306

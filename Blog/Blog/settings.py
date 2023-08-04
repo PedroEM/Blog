@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$3kursvv8u%)+%@b1fku=%pw!7z&!z1n183iedvy2ziex=+20u'
+SECRET_KEY = 'django-insecure-j$j1v$_&#_*98yutnjez&82=!goezofmsga=k5+1sn0t^!mm6u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'Blog_Economia',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,7 @@ ROOT_URLCONF = 'Blog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "Blog_Economia/templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,6 +118,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'Blog_Economia/static'),
+]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
