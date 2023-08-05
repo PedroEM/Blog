@@ -21,7 +21,7 @@
         <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div class="container px-4 px-lg-5">
                 {% if user.is_authenticated %}
-                    <p class="navbar-brand">Bienvenido, <a href="/perfil">{{ user.username }}</a></p>
+                    <p class="navbar-brand">Bienvenido, <a class="nav-link" href="/perfil">{{ user.username }}</a></p>
                     <a class="navbar-brand" href="/cerrar_sesion">Cerrar Sesion</a>
                 {% else %}
                     <a class="navbar-brand" href="/iniciar_sesion">Iniciar Sesión</a>
@@ -62,11 +62,7 @@
                     <li><a href="{% url 'categoria' id_categoria=categoria.id %}">{{ categoria.nombre }}</a></li>
                 {% endfor %}
             </ul>
-<<<<<<< HEAD
-        </nav>        
-=======
           </nav>        
->>>>>>> d2382c94f233b790a20660b4f8491631be6a6306
 
     
         <!-- barras  lateral-->

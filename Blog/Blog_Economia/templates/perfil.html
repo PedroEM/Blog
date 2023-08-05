@@ -69,7 +69,7 @@
                         window.location.href = "/editar_perfil";
                     }
                     function crear_articulo() {
-                        window.location.href = "/crear_articulo";
+                        window.location.href = "/crear_noticia";
                     }
                 </script>
             </div>
@@ -129,10 +129,10 @@
                 <p class="mb-4"><span class="text-primary font-italic me-1">Comentarios</span>
                 </p>
                 {% for comentario in comentarios %}
-                    <a href="{% url 'noticia' id_noticia=comentario.articulo.pk %}" class="mb-1" style="font-size: 1.5rem;">
+                    <p>Articulo: <a href="{% url 'noticia' id_noticia=comentario.articulo.pk %}" class="mb-1" style="font-size: 1.5rem;">
                         {{ comentario.articulo.titulo }}
-                    </a>
-                    <p>{{comentario.contenido|truncatechars:20}}</p>
+                    </a></p>
+                    <p>Comentario: {{comentario.contenido|truncatechars:20}}</p>
                 {% endfor %}
               </div>
             </div>

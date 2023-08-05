@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Contacto</title>
+        <title>Editar Perfil</title>
         <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -15,18 +15,12 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" href="{% static 'css/registrarse.css' %}">
     </head>
     <body>
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div class="container px-4 px-lg-5">
-                {% if user.is_authenticated %}
-                    <p class="navbar-brand">Bienvenido, <a href="/perfil">{{ user.username }}</a></p>
-                    <a class="navbar-brand" href="/cerrar_sesion">Cerrar Sesion</a>
-                {% else %}
-                    <a class="navbar-brand" href="/iniciar_sesion">Iniciar Sesión</a>
-                    <a class="navbar-brand" href="/registrarse">Registrarse</a>
-                {% endif %}
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars"></i>
@@ -42,52 +36,30 @@
             </div>
         </nav>
         <!-- Page Header-->
-        <header class="masthead" style="background-image: url({% static 'img/contact-bg.jpg'%})">
+        <header class="masthead" style="background-image: url('{% static 'img/imagen_inicio.png' %}')">
             <div class="container position-relative px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
-                        <div class="page-heading">
-                            <h1>Contacto</h1>
+                        <div class="site-heading">
+                            <h1>Editar Perfil</h1>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
-        <!-- Main Content-->
-        <main class="mb-4">
-            <div class="container px-4 px-lg-5">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-md-10 col-lg-8 col-xl-7">
-                        <p>"Nos encantaría saber de ti y establecer una conexión en el apasionante mundo de la economía. Si tienes alguna pregunta, sugerencia o simplemente quieres compartir tus pensamientos sobre los temas económicos que abordamos en nuestro blog, no dudes en contactarnos. Estamos aquí para escucharte y brindarte asistencia en todo lo relacionado con economía, finanzas y negocios. Ya sea que estés buscando consejos financieros, desees discutir ideas de inversión o simplemente entablar una conversación sobre el panorama económico actual, estaremos encantados de recibir tus mensajes. ¡No dudes en contactarnos y ser parte de nuestra comunidad dedicada al mundo de la economía!"</p>
-                            <form id="contactForm" method="post">
-                                {% csrf_token %}
-                                {% if envio_exitoso %}
-                                    <p style="color:black;">¡Envío de formulario exitoso!</p>
-                                {% endif %}
-                                <div class="form-floating">
-                                    <input name="nombre" class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
-                                    <label for="name">Nombre</label>
-                                    <div class="invalid-feedback" data-sb-feedback="name:required">Se requiere un nombre.</div>
-                                </div>
-                                <div class="form-floating">
-                                    <input class="form-control" id="email" type="email" name="correo" placeholder="Enter your email..." data-sb-validations="required,email" />
-                                    <label for="email">Dirección de correo electrónico</label>
-                                    <div class="invalid-feedback" data-sb-feedback="email:required">Correo electrónico rrequerido.</div>
-                                    <div class="invalid-feedback" data-sb-feedback="email:email">El correo no es valido.</div>
-                                </div>
-                                <div class="form-floating">
-                                    <textarea name="mensaje" class="form-control" id="message" placeholder="Enter your message here..." style="height: 12rem" data-sb-validations="required"></textarea>
-                                    <label for="message">Mensaje</label>
-                                    <div class="invalid-feedback" data-sb-feedback="message:required">Se requiere un mensaje.</div>
-                                </div>
-                                <br />
-                                <button class="btn btn-primary text-uppercase" id="submitButton" type="submit">Enviar</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+        
+        <div class="container_registrarse">
+            <form class="form" method="post" action="/editar_perfil/">
+                {% csrf_token %}
+                <h2>Editar Perfile</h2>
+                <input type="text" name="first-name" placeholder="Nombre" required>
+                <input type="text" name="last-name" placeholder="Apellido" required>
+                <input type="email" name="email" placeholder="Correo electrónico" required>
+                <input type="password" name="password" placeholder="Contraseña" required>
+                <button type="submit">Editar</button>
+            </form>
+        </div>
+
         <!-- Footer-->
         <footer class="border-top">
             <div class="container px-4 px-lg-5">
@@ -126,10 +98,5 @@
         </footer>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     </body>
 </html>

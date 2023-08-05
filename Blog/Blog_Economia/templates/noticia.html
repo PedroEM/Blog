@@ -41,9 +41,26 @@
                             <!-- Post title-->
                             <h1 class="fw-bolder mb-1">{{articulo.titulo}}</h1>
                             <!-- Post meta content-->
-                            <div class="text-muted fst-italic mb-2">Publicado {{ articulo.fecha|date:"l, j \de F \a \l\a\s H:i" }} por {{articulo.usuario.user.username}}</div>
+                            <div class="text-muted fst-italic mb-2">Publicado {{ articulo.fecha|date:"l, j \d\e F \a \l\a\s H:i" }} por {{articulo.usuario.user.username}}</div>
                             <!-- Post categories-->
-                            <a class="badge bg-secondary text-decoration-none link-light" href="#!">{{articulo.categoria.nombre}}</a>
+                            <div class="d-flex justify-content-between">
+                                <a class="badge bg-secondary text-decoration-none link-light" href="#!">{{articulo.categoria.nombre}}</a>
+                                <div>
+                                    {% if articulo.usuario.user.id == request.user.id %}
+                                    <button class="btn btn-outline-primary" onclick="editarArticulo()">Editar Articulo</button>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="accion" value="eliminar-noticia">
+                                        <button class="btn btn-outline-danger" type="submit">Eliminar</button>
+                                    </form>
+                                    {% endif %}
+                                    <script>
+                                        function editarArticulo(){
+                                            window.location.href = "/editar_noticia/{{ articulo.id }}"
+                                        }
+                                    </script>
+                                </div>
+                            </div>
                         </header>
                         <!-- Preview image figure-->
                         <figure class="mb-4"><img class="img-fluid rounded" src="{{ articulo.imagen.url }}" alt="{{ articulo.titulo }}" /></figure>
@@ -57,15 +74,56 @@
                         <div class="card bg-light">
                             <div class="card-body">
                                 <!-- Comment form-->
-                                <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
+                                <form class="mb-4" method="post">
+                                    {% csrf_token %}
+                                    <textarea name="contenido" class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                    <input type="hidden" name="accion" value="comentar">
+                                    <button class="btn btn-primary" type="submit">Comentar</button>
+                                </form>
                                 <!-- Comment with nested comments-->
                                 <!-- Single comment-->
                                 {% for comentario in comentarios %}
                                 <div class="d-flex">
-                                    <div class="flex-shrink-0">{{comentario.usuario.user.username}}</div>
+                                    <div class="flex-shrink-0">
+                                        {% if usuario.imagen %}
+                                            <img class="rounded-circle" src="{{ usuario.imagen.url }}" alt=".." style="width: 50px; height: 50px;" />
+                                        {% else %}
+                                            <img class="rounded-circle" src="{% static 'img/default-profile.png' %}" alt=".." style="width: 50px; height: 50px;" />
+                                        {% endif %}
+                                    </div>
                                     <div class="ms-3">
-                                        <div class="fw-bold"></div>
-                                        {{ comentario.contenido }}
+                                        <div class="fw-bold">{{comentario.usuario.user.username}}</div>
+                                        <textarea class="form-control" name="contenido-{{comentario.id}}" id="comentario-{{comentario.id}}" style="resize: none;" readonly>{{ comentario.contenido }}</textarea>
+                                        {% if comentario.usuario.user.id == request.user.id %}
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <button class="btn btn-primary" id="boton-editar1-{{comentario.id}}" onclick="editarComentario_{{comentario.id}}()">Editar</button>
+                                            <form method="post" id="editar">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="accion" value="editar">
+                                                <input type="hidden" name="comentario_id" value="{{ comentario.id }}">
+                                                <input type="hidden" name="contenido" value="" id="contenido">
+                                                <button id="boton-editar2-{{comentario.id}}" class="btn btn-primary" style="display: none;" onclick="enviar_{{comentario.id}}()">Editar</button>
+                                            </form>
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="accion" value="eliminar">
+                                                <input type="hidden" name="comentario_id" value="{{ comentario.id }}">
+                                                <button class="btn btn-danger" type="submit">Eliminar</button>
+                                            </form>
+                                            <script>
+                                                function editarComentario_{{comentario.id}}(){
+                                                    document.getElementById("comentario-{{comentario.id}}").readOnly = false;
+                                                    document.getElementById("boton-editar1-{{comentario.id}}").style.display = "none";
+                                                    document.getElementById("boton-editar2-{{comentario.id}}").style.display = "block";
+                                                }
+                                                function enviar_{{comentario.id}}(){
+                                                    input = document.getElementById("contenido");
+                                                    input.value = document.getElementById("comentario-{{comentario.id}}").value;
+                                                    document.getElementById("editar").submit();
+                                                }
+                                            </script>
+                                        </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 {% endfor %}
