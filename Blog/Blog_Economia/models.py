@@ -26,7 +26,7 @@ class Articulo(models.Model):
     titulo = models.CharField(max_length=50)
     contenido = models.TextField()
     fecha = models.DateTimeField(auto_now_add=True)
-    imagen = models.ImageField(null=True, blank=True, upload_to="articulos")
+    imagen = models.ImageField(null=True, blank=True, upload_to="imagenes")
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
@@ -41,8 +41,6 @@ class Comentario(models.Model):
 
     def __str__(self):
         return self.contenido
-<<<<<<< HEAD
-=======
 
 class Contacto(models.Model):
     nombre = models.CharField(max_length=50)
@@ -51,4 +49,3 @@ class Contacto(models.Model):
 
     def __str__(self):
         return self.nombre
->>>>>>> d2382c94f233b790a20660b4f8491631be6a6306

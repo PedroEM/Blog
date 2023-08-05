@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import Usuario, Articulo, Comentario, Categoria, Contacto
+from django.urls import reverse
 
 
 
@@ -123,7 +124,7 @@ def crear_noticia(request):
             usuario=usuario
         )
 
-        return redirect('/noticia/', id_noticia=articulo.id)
+        return redirect(reverse('noticia', args=[articulo.id]))
     
     categorias = Categoria.objects.all()
     return render(request, 'crear_noticia.html', {'categorias': categorias})
@@ -131,6 +132,45 @@ def crear_noticia(request):
 def noticia(request, id_noticia):
     articulo = get_object_or_404(Articulo, id=id_noticia)
     comentarios = Comentario.objects.filter(articulo=articulo)
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return redirect(reverse('noticia', args=[articulo.id]))
+
+        if request.POST.get('accion') == 'editar':
+            comentario_id = request.POST.get('comentario_id')
+            comentario = Comentario.objects.get(id=comentario_id)
+            nuevo_contenido = request.POST.get("contenido")
+            print(comentario.contenido)
+            print(nuevo_contenido)
+            comentario.contenido = nuevo_contenido
+            comentario.save()
+            return render(request, 'noticia.html', {'articulo': articulo, 'comentarios': comentarios})
+        
+        if request.POST.get('accion') == 'eliminar':
+            comentario_id = request.POST.get('comentario_id')
+            comentario = Comentario.objects.get(id=comentario_id)
+            comentario.delete()
+            return redirect(reverse('noticia', args=[articulo.id]))
+
+        if request.POST.get('accion') == 'eliminar-noticia':
+            for comentario in comentarios:
+                comentario.delete()
+            articulo.delete()
+            return redirect('/')
+
+        if request.POST.get('accion') == 'comentar':
+            contenido = request.POST.get('contenido')
+            fecha = datetime.datetime.now()
+            usuario = request.user.usuario
+
+            Comentario.objects.create(
+                contenido=contenido,
+                fecha=fecha,
+                usuario=usuario,
+                articulo=articulo
+            )
+
+            return redirect(reverse('noticia', args=[articulo.id]))
     return render(request, 'noticia.html', {'articulo': articulo, 'comentarios': comentarios})
 
 def acerca_de(request):
@@ -159,3 +199,40 @@ def perfil(request):
     articulos = Articulo.objects.filter(usuario=request.user.usuario)
     comentarios = Comentario.objects.filter(usuario=request.user.usuario)
     return render(request, 'perfil.html', {'articulos': articulos, 'comentarios': comentarios})
+
+@login_required
+def editar_perfil(request):
+    if request.method == 'POST':
+        usuario = request.user
+        usuario.first_name = request.POST.get('first-name')
+        usuario.last_name = request.POST.get('last-name')
+        usuario.email = request.POST.get('email')
+        password = request.POST.get('password')
+        if password:
+            usuario.set_password(password)
+        usuario.save()
+        user = authenticate(request, username=usuario.username, password=password)
+        login(request, user)
+            
+        return redirect('/perfil')
+    
+    return render(request, 'editar_perfil.html')
+
+@login_required
+def editar_noticia(request, id_noticia):
+    articulo = get_object_or_404(Articulo, id=id_noticia)
+    if not request.user.usuario == articulo.usuario:
+        return redirect('/')
+    
+    if request.method == 'POST':
+        articulo.titulo = request.POST.get('titulo')
+        articulo.contenido = request.POST.get('contenido')
+        articulo.fecha = datetime.datetime.now()
+        articulo.imagen = request.FILES.get('imagen')
+        articulo.categoria_id = request.POST.get('categoria')
+        articulo.save()
+
+        return redirect(reverse('noticia', args=[articulo.id]))
+    
+    categorias = Categoria.objects.all()
+    return render(request, 'editar_noticia.html', {'articulo': articulo, 'categorias': categorias})
